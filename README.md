@@ -1,4 +1,4 @@
-##CC 106395 Spring 2020: Course Repository##
+# CC 106395 Spring 2020: Course Repository #
 ### PROJECT MEMBERS ###
 StdID | Name
 ------------ | -------------
