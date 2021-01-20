@@ -8,5 +8,5 @@ Here is a pictorial represntation that how java works to produce output.
 
 
 ## REFERENCES ##
-
-(https://www.quora.com)
+[1] https://medium.com/@rahul77349/difference-between-compiler-and-interpreter-with-respect-to-jvm-java-virtual-machine-and-pvm-22fc77ae0eb7
+[2] https://www.codespeedy.com/why-java-is-called-compiler-interpreter-language/
