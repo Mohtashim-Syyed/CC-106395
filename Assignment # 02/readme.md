@@ -1,1 +1,1 @@
-nn
+# JAVA is interpreter or Compiler? #
