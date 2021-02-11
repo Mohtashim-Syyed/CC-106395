@@ -56,13 +56,13 @@ namespace ConsoleApp11
             while (Count == 0)
             {
 
-                Console.WriteLine("Your Email for Validation");
+                 Console.WriteLine("Enter Email for Validation");
                 string email = Console.ReadLine();
 
                 if ((email[0] == RE[0] || email[0] == RE[1]) && (email.Contains(RE[6])) && (email[email.Length - 1] != RE[6]) && ((email[email.Length - 1] != RE[4])))
                 {
 
-                    Console.WriteLine("Sorry! Your email address is VALID");
+                    Console.WriteLine("Your email address is VALID");
                     Console.WriteLine();
                     Console.ReadKey();
 
@@ -70,9 +70,10 @@ namespace ConsoleApp11
 
                 else
                 {
-                    Console.WriteLine("Entered email address is INVALID");
+                    Console.WriteLine("Sorry! Your email address is INVALID");
 
                 }
+ 
                 Console.WriteLine();
             }
 
