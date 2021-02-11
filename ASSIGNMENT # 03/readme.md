@@ -5,6 +5,6 @@ StdID | Name
 63433 | Yousuf Muhammad Khan
 
 
-#### Given: # Alphabet = {"a", "b", "0", "1", ".", "_", "@"}
+#### Given:  Alphabet = {"a", "b", "0", "1", ".", "_", "@"}
 
-#### REGULAR EXPRESSION FOR GIVEN Alphabet: #  
+#### REGULAR EXPRESSION FOR GIVEN Alphabet: #  jjzjz
