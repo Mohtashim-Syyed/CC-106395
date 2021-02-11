@@ -6,3 +6,5 @@ StdID | Name
 
 
 #### Given: Alphabet = {"a", "b", "0", "1", ".", "_", "@"}
+
+#### REGULAR EXPRESSION FOR GIVEN Alphabet: #  
