@@ -7,7 +7,7 @@ StdID | Name
 
 ### Given:  Alphabet = {"a", "b", "0", "1", ".", "_", "@"}
 
-### REGULAR EXPRESSION FOR GIVEN Alphabet: (a+b)(a+b+0+1+.+_)*@(a+b+0+1+.)*
+### REGULAR EXPRESSION FOR GIVEN Alphabet TO VALIDATE EMAIL ADDRESSES: (a+b)(a+b+0+1+.+_)*@(a+b+0+1+.)*
 
 ## NFA FOR R.E ##
 
@@ -83,3 +83,8 @@ namespace ConsoleApp11
     }
 
 }
+
+
+## DEMO VIDEO LINK ##
+
+https://user-images.githubusercontent.com/61554600/107667890-de542600-6cb1-11eb-99cc-f4bd5dec4ae6.mp4
