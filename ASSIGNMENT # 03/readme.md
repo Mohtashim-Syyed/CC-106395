@@ -9,4 +9,4 @@ StdID | Name
 
 #### REGULAR EXPRESSION FOR GIVEN Alphabet: (a+b)(a+b+0+1+.+_)*@(a+b+0+1+.)*
 
-### NFA FOR R.E ###
+#### NFA FOR R.E ####
