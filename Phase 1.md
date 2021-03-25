@@ -7,7 +7,7 @@ StdID | Name
 
 
 ## Language Selected ##
-Mini Java
+Mini C
 
 ## Example of main constructs ##
 ```
