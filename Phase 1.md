@@ -1,5 +1,5 @@
-#CC Spring 2021: Project Phase 1#
-###PROJECT MEMBERS###
+# CC Spring 2021: Project Phase 1 #
+### PROJECT MEMBERS ###
 StdID | Name
 ------------ | -------------
 **63152** | **Syed Muhammad Mohtashim Kamal**
