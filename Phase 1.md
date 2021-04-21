@@ -42,6 +42,21 @@ PROGRAM FindLarge;
          addition := a + b;  // this is the return value     
        end;    
 ```
+
+## Procedure Example ##
+```
+PROCEDURE PrintGraph (Size:INTEGER);
+ {PROCEDURE TO OUTPUT A LINE OF 'SIZE' ASTERISKS}
+ VAR
+ I:INTEGER;
+ BEGIN
+ FOR I:=1 TO Size DO
+ WRITE('*');
+ WRITELN
+ END; 
+
+```
+
 ## Array Example ##
 ```
   VAR a, b : array [ 1 .. 10 ] of array [ 1 .. 10 ] of Integer;
