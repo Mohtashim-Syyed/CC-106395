@@ -7,14 +7,13 @@ StdID | Name
 
 
 ## Language Selected ##
-Mini C
+Mini Pascal
 
-## Example of main constructs ##
-```
-int main(){
-
-}
-```
+## Function Example ##
+ function  addition(a, b: integer) : integer;
+      begin
+         addition := a + b;  // this is the return value
+      end;
 
 ## Lexical Specification##
 IF
