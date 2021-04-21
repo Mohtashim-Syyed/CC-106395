@@ -15,7 +15,6 @@ Mini Pascal
       begin
          addition := a + b;  // this is the return value
       end;
-
 ## Lexical Specification##
 IF
 ELSE
