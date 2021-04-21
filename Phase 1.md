@@ -11,7 +11,7 @@ Mini Pascal
 
 ## Function Example ##
 
- function  addition(a, b: integer) : integer;
+ function  addition(a, b: integer) : integer;   
       begin
          addition := a + b;  // this is the return value
       end;
