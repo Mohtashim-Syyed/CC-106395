@@ -47,5 +47,4 @@ yylex();
 printf("\nNumber of Captial letters ");	
   
 }
-
 ```
