@@ -14,7 +14,7 @@ Mini Pascal
 VAR Sum, Number: INTEGER; 
 ```
 
-## IF ELSE Example ##
+## IF-ELSE Example ##
 ```
 
 PROGRAM FindLarge;
