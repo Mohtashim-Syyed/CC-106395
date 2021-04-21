@@ -12,7 +12,7 @@ Mini Pascal
 ## Function Example ##
 
  function  addition(a, b: integer) : integer;    
-           begin      
+  + begin      
          addition := a + b;  // this is the return value     
           end;    
 ## Lexical Specification##
