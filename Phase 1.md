@@ -9,6 +9,32 @@ StdID | Name
 ## Language Selected ##
 Mini Pascal
 
+## Variable Declaratrion Example ##
+```
+VAR Sum, Number: INTEGER; 
+```
+
+## IF ELSE Example ##
+```
+
+PROGRAM FindLarge;
+ { THIS PROGRAM READS IN TWO INTEGERS. IT
+ WILL DETERMINE WHICH IS THE LARGER OF THE TWO,
+ AND PRINT AN APPROPRIATE MESSAGE }
+ VAR
+ Number1:INTEGER;{FIRST NUMBER READ}
+ Number2:INTEGER;{SECOND NUMBER READ}
+ Larger:INTEGER;{THE LARGER ONE}
+ BEGIN
+ READLN(Number1,Number2);
+ IF Number1 > Number2 THEN
+ Larger := Number1
+ ELSE
+ Larger := Number2;
+ WRITELN('THE LARGER OF ',Number1,
+ ' AND ',Number2,' IS ',Larger)
+ END. 
+ ```
 ## Function Example ##
 ```
  function  addition(a, b: integer) : integer;    
