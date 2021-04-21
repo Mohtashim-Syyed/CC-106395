@@ -5,8 +5,7 @@ StdID | Name
 **63152** | **Syed Muhammad Mohtashim Kamal**
 63433 | Yousuf Muhammad Khan
 
-### Lexical Analyzer ###
-
+## Lexical Analyzer ##
 ```
 
 %{
