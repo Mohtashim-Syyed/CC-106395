@@ -12,10 +12,24 @@ Mini Pascal
 ## Function Example ##
 ```
  function  addition(a, b: integer) : integer;    
-   begin      
+       begin      
          addition := a + b;  // this is the return value     
-          end;    
+       end;    
 ```
+## Array Example ##
+```
+  VAR a, b : array [ 1 .. 10 ] of array [ 1 .. 10 ] of Integer;
+    a[5] := b[3];    
+```
+## For Loop Example ##
+```
+ for i:= 1 to 10 do writeln(i);
+ 
+```
+
+
+
+
 ## Lexical Specification##
 IF
 ELSE
