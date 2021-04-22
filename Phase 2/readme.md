@@ -14,3 +14,4 @@ these syntaxes into a series of tokens, by removing any whitespace or comments i
 code.
 
 ## Process Flow Diagram Of Lexical Analyzer ##
+![Capture](https://user-images.githubusercontent.com/61554600/115705946-9410b480-a386-11eb-8874-693c326d1d2f.PNG)
