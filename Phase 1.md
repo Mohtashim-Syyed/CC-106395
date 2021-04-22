@@ -7,7 +7,7 @@ StdID | Name
 
 
 ## Language Selected ##
-Mini C
+**Mini C**
 
 ## Variable Declaratrion Example ##
 
