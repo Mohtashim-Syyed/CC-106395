@@ -18,7 +18,7 @@ code.
 
 ## Flex Script ##
 
-We have used the lex tool to write a script to generate the Scanner or the Lexical analyser. This
+We have used the lex tool to write a script to generate the Lexical analyser. This
 script has three sections as followed,
 1. Definition Section
 This section is for importing any C header files, variable declarations for variables which
