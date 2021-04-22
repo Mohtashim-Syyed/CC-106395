@@ -40,11 +40,23 @@ PROGRAM FindLarge;
  END. 
  ```
 ## Function Example ##
+
+**Calculating Factorial**
 ```
- function  addition(a, b: integer) : integer;    
-       begin      
-         addition := a + b;  // this is the return value     
-       end;    
+void main(int i) {
+int r;
+fac(i, &r);
+print r;
+}
+void fac(int n, int *res) {
+if (n == 0)
+*res = 1;
+else {
+int tmp;
+fac(n-1, &tmp);
+*res = tmp * n;
+}
+}  
 ```
 
 ## Procedure Example ##
