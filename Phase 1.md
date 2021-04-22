@@ -18,27 +18,22 @@ int *p| p is a pointer to integer
 int a[3]| a is array of 3 integers
 int *i[4]| i is array of 4 pointers to integers
 
-## IF-ELSE Example ##
+
+## Declaratrion Of Global Function Example ##
+```
+void swap(int *x, int *y) { ... }
 ```
 
-PROGRAM FindLarge;
- { THIS PROGRAM READS IN TWO INTEGERS. IT
- WILL DETERMINE WHICH IS THE LARGER OF THE TWO,
- AND PRINT AN APPROPRIATE MESSAGE }
- VAR
- Number1:INTEGER;{FIRST NUMBER READ}
- Number2:INTEGER;{SECOND NUMBER READ}
- Larger:INTEGER;{THE LARGER ONE}
- BEGIN
- READLN(Number1,Number2);
- IF Number1 > Number2 THEN
- Larger := Number1
- ELSE
- Larger := Number2;
- WRITELN('THE LARGER OF ',Number1,
- ' AND ',Number2,' IS ',Larger)
- END. 
- ```
+## Expressions ##
+```
+(*p + 1) * 12
+```
+
+## Statements ##
+```
+if (x != 0) y = 1/x;
+```
+
 ## Function Example ##
 
 **Calculating Factorial**
@@ -58,28 +53,16 @@ fac(n-1, &tmp);
 }
 }  
 ```
-
-## Procedure Example ##
-```
-PROCEDURE PrintGraph (Size:INTEGER);
- {PROCEDURE TO OUTPUT A LINE OF 'SIZE' ASTERISKS}
- VAR
- I:INTEGER;
- BEGIN
- FOR I:=1 TO Size DO
- WRITE('*');
- WRITELN
- END; 
-
-```
-## Array Example ##
-```
-  VAR a, b : array [ 1 .. 10 ] of array [ 1 .. 10 ] of Integer;
-    a[5] := b[3];    
-```
 ## For Loop Example ##
 ```
- for i:= 1 to 10 do writeln(i);
+int main() {
+  int i;
+  for (i = 1; i < 11; ++i)
+  {
+    printf("%d ", i);
+  }
+  return 0;
+}
  
 ```
 
