@@ -15,3 +15,18 @@ code.
 
 ## Process Flow Diagram Of Lexical Analyzer ##
 ![Capture](https://user-images.githubusercontent.com/61554600/115705946-9410b480-a386-11eb-8874-693c326d1d2f.PNG)
+
+## Flex Script ##
+
+We have used the lex tool to write a script to generate the Scanner or the Lexical analyser. This
+script has three sections as followed,
+1. Definition Section
+This section is for importing any C header files, variable declarations for variables which
+are used later in the program etc.
+2. Rules Section
+This section is for defining the rules for every token type using regular expressions, the
+scanner uses these rules to match lexemes in the test file to various tokens.
+3. C Code Section
+This section is for C code in the script, here we call functions for setting up the symbol
+and the constant table along with displaying them, and calling the lexical analyser using
+the yylex() function.
