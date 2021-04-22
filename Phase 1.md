@@ -7,12 +7,16 @@ StdID | Name
 
 
 ## Language Selected ##
-Mini Pascal
+Mini C
 
 ## Variable Declaratrion Example ##
-```
-VAR Sum, Number: INTEGER; 
-```
+
+**Declaration** | **Meaning**
+------------ | -------------
+int n | n is an integer
+int *p| p is a pointer to integer
+int a[3]| a is array of 3 integers
+int *i[4]| i is array of 4 pointers to integers
 
 ## IF-ELSE Example ##
 ```
