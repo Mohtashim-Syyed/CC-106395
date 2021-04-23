@@ -8,12 +8,13 @@ StdID | Name
 
 ## Language Selected ##
 ### Mini C ###
-
-## Mini C ##
+**Mini C **
 
 **Mini** C is both a subset of the C programming language, suitable for resource-limited microcomputers and embedded systems, and an implementation of that subset. Originally valuable as an early compiler for microcomputer systems available during the late 1970s and early 1980s, the implementation has also been useful as an example simple enough for teaching purposes.
 
-## Variable Declaratrion Example ##
+## Sample Constructs Of The Language ##
+
+### Variable Declaratrion Example ##
 
 **Declaration** | **Meaning**
 ------------ | -------------
@@ -23,22 +24,21 @@ int a[3]| a is array of 3 integers
 int *i[4]| i is array of 4 pointers to integers
 
 
-## Declaratrion Of Global Function Example ##
+### Declaratrion Of Global Function Example ##
 ```
 void swap(int *x, int *y) { ... }
 ```
 
-## Expressions ##
+### Expressions ##
 ```
 (*p + 1) * 12
 ```
-
-## Statements ##
+### Statements ##
 ```
 if (x != 0) y = 1/x;
 ```
 
-## Function Example ##
+### Function Example ##
 
 **Calculating Factorial**
 ```
@@ -57,7 +57,7 @@ fac(n-1, &tmp);
 }
 }  
 ```
-## For Loop Example ##
+### For Loop Example ##
 ```
 int main() {
   int i;
