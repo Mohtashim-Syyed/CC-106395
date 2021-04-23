@@ -12,3 +12,5 @@ of a sequence of tokens or program instructions and usually builds a data struct
 in the form of a parse tree or an abstract syntax tree.
 
 ## Parser Interacting With Lexical Analyzer ##
+
+![parser](https://user-images.githubusercontent.com/61554600/115813901-84887e80-a40d-11eb-8776-1f8aa1ce5395.jpg)
