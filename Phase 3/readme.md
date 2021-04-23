@@ -43,3 +43,8 @@ In the C code section the parser is called, and the symbol table and constant ta
 are initialised in this section. The lex.yy.c file created by the lex script is also included
 from here which the parser calls. In this section we also define the error function
 used by the parser to report syntactical errors along with line numbers.
+
+## REFERENCES ##
+
+- Parser Introduction: 
+- Parser Interacting With Lexical Analyzer: https://www.brainkart.com/article/Lexical-Analysis_8074/ 
