@@ -1,6 +1,6 @@
-#CC 106395:Mini C#
+# CC 106395:Mini C #
 
-###PROJECT MEMBERS###
+### PROJECT MEMBERS ###
 StdID | Name
 ------------ | -------------
 **63152** | **Syed Muhammad Mohtashim kamal** <!--this is the group leader in bold-->
