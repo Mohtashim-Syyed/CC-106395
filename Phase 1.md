@@ -14,7 +14,7 @@ StdID | Name
 
 ## Sample Constructs Of The Language ##
 
-### Variable Declaratrion Example ##
+### Variable Declaratrion ##
 
 **Declaration** | **Meaning**
 ------------ | -------------
@@ -24,7 +24,7 @@ int a[3]| a is array of 3 integers
 int *i[4]| i is array of 4 pointers to integers
 
 
-### Declaratrion Of Global Function Example ##
+### Declaratrion Of Global Function ##
 ```
 void swap(int *x, int *y) { ... }
 ```
@@ -38,7 +38,7 @@ void swap(int *x, int *y) { ... }
 if (x != 0) y = 1/x;
 ```
 
-### Function Example ##
+### Function ##
 
 **Calculating Factorial**
 ```
@@ -57,7 +57,7 @@ fac(n-1, &tmp);
 }
 }  
 ```
-### For Loop Example ##
+### For Loop ##
 ```
 int main() {
   int i;
@@ -148,3 +148,4 @@ Whitespace characters (' ', '\t', '\r', '\n') are skipped outside of tokens.
 ## REFERENCES ##
 
 - Mini C Introduction: https://en.wikipedia.org/wiki/Small-C
+- Sample Constructs Of The Language: https://homepage.cs.uiowa.edu/~tinelli/classes/3820/Fall16/notes/chap7-micro-C.pdf
