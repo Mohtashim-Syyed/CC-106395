@@ -30,3 +30,8 @@ scanner uses these rules to match lexemes in the test file to various tokens.
 This section is for C code in the script, here we call functions for setting up the symbol
 and the constant table along with displaying them, and calling the lexical analyser using
 the yylex() function.
+
+## REFERENCES ##
+
+- Lexical Analyzer Introduction: 
+- Process Flow Diagram: 
