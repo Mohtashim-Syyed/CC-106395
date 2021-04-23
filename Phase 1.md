@@ -147,4 +147,4 @@ Whitespace characters (' ', '\t', '\r', '\n') are skipped outside of tokens.
  ```
 ## REFERENCES ##
 
-https://en.wikipedia.org/wiki/Small-C
+- Mini C Introduction: https://en.wikipedia.org/wiki/Small-C
