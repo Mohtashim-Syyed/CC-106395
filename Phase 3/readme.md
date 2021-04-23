@@ -46,5 +46,5 @@ used by the parser to report syntactical errors along with line numbers.
 
 ## REFERENCES ##
 
-- Parser Introduction: 
+- Parser Introduction: https://github.com/gauribaraskar/Mini-C-compiler/blob/master/Report/Report-Parser.pdf
 - Parser Interacting With Lexical Analyzer: https://www.brainkart.com/article/Lexical-Analysis_8074/ 
