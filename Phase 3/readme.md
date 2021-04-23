@@ -32,13 +32,13 @@ The structure of our Yacc script is given below; Our file is divided into three 
 The definition section is used to define any parameters for the C program, any
 header files to be included and global variable declarations. We also define all
 parameters related to the parser here, specifications like using Leftmost derivationsor Rightmost derivations, precedence and left right associativity are declared here,
-data types and tokens which will be used by the lexical analyser are also declared in
-this stage.    
+data types and tokens which will be used by the lexical analyser are also declared here.   
 
 The Rules section contains the entire grammar which is used for deciding if the input
 text is legally correct according to the specifications of the language. Yacc uses this
-rules for reducing the token stream received from the scanner, all rules are linked to
-each other from the start state, which is declared in the rules section.
+rules for reducing the token stream received from the lexical Analyzer, all rules are linked to
+each other from the start state, which is declared in the rules section.    
+
 In the C code section the parser is called, and the symbol table and constant tables
 are initialised in this section. The lex.yy.c file created by the lex script is also included
 from here which the parser calls. In this section we also define the error function
