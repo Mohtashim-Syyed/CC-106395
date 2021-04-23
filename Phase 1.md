@@ -9,6 +9,10 @@ StdID | Name
 ## Language Selected ##
 ### Mini C ###
 
+## Mini C ##
+
+**Mini** C is both a subset of the C programming language, suitable for resource-limited microcomputers and embedded systems, and an implementation of that subset. Originally valuable as an early compiler for microcomputer systems available during the late 1970s and early 1980s, the implementation has also been useful as an example simple enough for teaching purposes.
+
 ## Variable Declaratrion Example ##
 
 **Declaration** | **Meaning**
@@ -141,3 +145,6 @@ LETTER = 'a' | ... | 'z' | 'A' | ... | 'Z'
 CHAR = <unicode character, as in Java>
 Whitespace characters (' ', '\t', '\r', '\n') are skipped outside of tokens. 
  ```
+## REFERENCES ##
+
+https://en.wikipedia.org/wiki/Small-C
