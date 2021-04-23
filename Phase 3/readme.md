@@ -22,8 +22,10 @@ describing the input to a computer program. The Yacc user specifies the structur
 of his input, together with code to be invoked as each such structure is recognized.  
 
 The structure of our Yacc script is given below; files are divided into three sections,
-separated by lines that contain only two percent signs, as follows:   
-Definition section   
+separated by lines that contain only two percent signs, as follows    
+
+Definition section      
+
 %%   
 Rules section     
 %%   
