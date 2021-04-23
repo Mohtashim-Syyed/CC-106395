@@ -15,7 +15,7 @@ in the form of a parse tree or an abstract syntax tree.
 
 ![parser](https://user-images.githubusercontent.com/61554600/115813901-84887e80-a40d-11eb-8776-1f8aa1ce5395.jpg)
 
-## Yacc Script ##   
+## YACC Script ##   
 
 Yacc stands for Yet Another Compiler-Compiler. Yacc provides a general tool for
 describing the input to a computer program. The Yacc user specifies the structures
