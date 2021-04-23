@@ -1,90 +1,112 @@
-%option noyywrap
 %{
- #include <unistd.h>
- #include <stdbool.h>
 
- void write_token_to_file(int token_class);
- bool validate_file_path(char *path);
- void main(int argc, char **argv);
-  
- #define KEYWORD 1
- #define IDENTIFIER 2
- #define INTEGER_LITERAL 3
- #define FLOATING_POINT_LITERAL 4
- #define STRING_LITERAL 5
- #define ARITHMETIC_OPERATOR 6
- #define COMPARISON_OPERATOR 7
- #define LOGICAL_OPERATOR 8
- #define ASSIGNMENT_OPERATOR 9
- #define OPEN_BRACE 10
- #define CLOSE_BRACE 11
- #define OPEN_PARE 12
- #define CLOSE_PARE 13
- #define SEMI 14
+#include <stdlib.h>
+#include <stdio.h>
+
+entry_t** symbol_table;
+entry_t** constant_table;
+int cmnt_strt = 0;
+
 %}
-LETTER [a-zA-Z]
-DIGIT [0-9]
-RESERVED_KEYWORD if|else|while|continue|break|int|double|bool|string|true|false
-RESERVED_IDENTIFIER exit|print|println|toString|readInt|readDouble|readLine
-%%
 
-{RESERVED_KEYWORD}|{RESERVED_IDENTIFIER} write_token_to_file(KEYWORD);
-({LETTER}|_)({LETTER}|{DIGIT}|_)* write_token_to_file(IDENTIFIER);
-{DIGIT}+ write_token_to_file(INTEGER_LITERAL);
-{DIGIT}+"."{DIGIT}+ write_token_to_file(FLOATING_POINT_LITERAL);
-\".*\" write_token_to_file(STRING_LITERAL);
-"+"|"-"|"*"|"/"|"%" write_token_to_file(ARITHMETIC_OPERATOR);
-"=="|"!="|"<"|">"|"<="|">=" write_token_to_file(COMPARISON_OPERATOR);
-"!"|"&&"|"||" write_token_to_file(LOGICAL_OPERATOR);
-"=" write_token_to_file(ASSIGNMENT_OPERATOR);
-"{" write_token_to_file(OPEN_BRACE);
-"}" write_token_to_file(CLOSE_BRACE);
-"(" write_token_to_file(OPEN_PARE);
-")" write_token_to_file(CLOSE_PARE);
-";" write_token_to_file(SEMI);
-.|\n
+letter [a-zA-Z]
+digit [0-9]
+ws  [ \t\r\f\v]+
+identifier (_|{letter})({letter}|{digit}|_){0,31}
+hex [0-9a-f]
+
+ /* Exclusive states */
+%x CMNT
+%x PREPROC
 
 %%
+  /* Keywords*/
+"int"                             {printf("\t%-30s : %3d\n",yytext,INT);}
+"long"                            {printf("\t%-30s : %3d\n",yytext,LONG);}
+"long long"                       {printf("\t%-30s : %3d\n",yytext,LONG_LONG);}
+"short"                           {printf("\t%-30s : %3d\n",yytext,SHORT);}
+"signed"                          {printf("\t%-30s : %3d\n",yytext,SIGNED);}
+"unsigned"                        {printf("\t%-30s : %3d\n",yytext,UNSIGNED);}
+"for"                             {printf("\t%-30s : %3d\n",yytext,FOR);}
+"break"                           {printf("\t%-30s : %3d\n",yytext,BREAK);}
+"continue"                        {printf("\t%-30s : %3d\n",yytext,CONTINUE);}
+"if"                              {printf("\t%-30s : %3d\n",yytext,IF);}
+"else"                            {printf("\t%-30s : %3d\n",yytext,ELSE);}
+"return"                          {printf("\t%-30s : %3d\n",yytext,RETURN);}
 
-void write_token_to_file(int token_class)
-{
- char str[1];
- sprintf(str, "%d", token_class);
- fputs("<", yyout);
- fputs(str, yyout);
- fputs(", ", yyout);
- fputs(yytext, yyout);
- fputs(">\n", yyout);
-}
-bool validate_file_path(char *path)
-{
-  if (access(path, F_OK) != 0)
-     return false;
-  return true;
-}
-void main(int argc, char **argv)
-{
- ++argv, --argc;
-  if (argc < 1)
-     yyin = stdin;
-  else if (argc > 1)
+{identifier}                      {printf("\t%-30s : %3d\n", yytext,IDENTIFIER);
+                                  insert( symbol_table,yytext,IDENTIFIER );}
+{ws}                              ;
+[+\-]?[0][x|X]{hex}+[lLuU]?        {printf("\t%-30s : %3d\n", yytext,HEX_CONSTANT);
+									insert( constant_table,yytext,HEX_CONSTANT);}
+[+\-]?{digit}+[lLuU]?              {printf("\t%-30s : %3d\n", yytext,DEC_CONSTANT);
+									insert( constant_table,yytext,DEC_CONSTANT);}
+"/*"                              {cmnt_strt = yylineno; BEGIN CMNT;}
+<CMNT>.|{ws}                      ;
+<CMNT>\n                          {yylineno++;}
+<CMNT>"*/"                        {BEGIN INITIAL;}
+<CMNT>"/*"                        {printf("Line %3d: Nested comments are not valid!\n",yylineno);}
+<CMNT><<EOF>>                     {printf("Line %3d: Unterminated comment\n", cmnt_strt); yyterminate();}
+^"#include"                       {BEGIN PREPROC;}
+<PREPROC>"<"[^<>\n]+">"            {printf("\t%-30s : %3d\n",yytext,HEADER_FILE);}
+<PREPROC>{ws}                       ;
+<PREPROC>\"[^"\n]+\"              {printf("\t%-30s : %3d\n",yytext,HEADER_FILE);}
+<PREPROC>\n                       {yylineno++; BEGIN INITIAL;}
+<PREPROC>.                        {printf("Line %3d: Illegal header file format \n",yylineno);}
+"//".*                            ;
+
+\"[^\"\n]*\"     {
+
+  if(yytext[yyleng-2]=='\\') /* check if it was an escaped quote */
   {
-   printf("takes only 1 argument :: path to an input text file");
-   return;
+    yyless(yyleng-1);       /* push the quote back if it was escaped */
+    yymore();
   }
   else
-  {
-   char *file_path = argv[0];
-    if (!validate_file_path(file_path))
-    {
-     printf("Cannot find path '%s' because it does not exist.", file_path);
-     return;
-    }
-    yyin = fopen(file_path, "r");
-    }
- yyout = fopen("./TokenStream.txt", "w");
- 
- yylex();
- fclose(yyin);
- fclose(yyout);
+  insert( constant_table,yytext,STRING);
+ }
+
+\"[^\"\n]*$                     {printf("Line %3d: Unterminated string %s\n",yylineno,yytext);}
+{digit}+({letter}|_)+	        {printf("Line %3d: Illegal identifier name %s\n",yylineno,yytext);}
+\n                              {yylineno++;}
+"--"			                {printf("\t%-30s : %3d\n",yytext,DECREMENT);}
+"++"			                {printf("\t%-30s : %3d\n",yytext,INCREMENT);}
+"->"			                {printf("\t%-30s : %3d\n",yytext,PTR_SELECT);}
+"&&"			                {printf("\t%-30s : %3d\n",yytext,LOGICAL_AND);}
+"||"			                {printf("\t%-30s : %3d\n",yytext,LOGICAL_OR);}
+"<="			                {printf("\t%-30s : %3d\n",yytext,LS_THAN_EQ);}
+">="			                {printf("\t%-30s : %3d\n",yytext,GR_THAN_EQ);}
+"=="			                {printf("\t%-30s : %3d\n",yytext,EQ);}
+"!="		                    {printf("\t%-30s : %3d\n",yytext,NOT_EQ);}
+";"			                    {printf("\t%-30s : %3d\n",yytext,DELIMITER);}
+"{"                             {printf("\t%-30s : %3d\n",yytext,OPEN_BRACES);}
+"}"                             {printf("\t%-30s : %3d\n",yytext,CLOSE_BRACES);}
+","			                    {printf("\t%-30s : %3d\n",yytext,COMMA);}
+"="			                    {printf("\t%-30s : %3d\n",yytext,ASSIGN);}
+"("			                    {printf("\t%-30s : %3d\n",yytext,OPEN_PAR);}
+")"			                    {printf("\t%-30s : %3d\n",yytext,CLOSE_PAR);}
+"["                             {printf("\t%-30s : %3d\n",yytext,OPEN_SQ_BRKT);}
+"]"                             {printf("\t%-30s : %3d\n",yytext,CLOSE_SQ_BRKT);}
+"-"			                    {printf("\t%-30s : %3d\n",yytext,MINUS);}
+"+"			                    {printf("\t%-30s : %3d\n",yytext,PLUS);}
+"*"			                    {printf("\t%-30s : %3d\n",yytext,STAR);}
+"/"		                        {printf("\t%-30s : %3d\n",yytext,FW_SLASH);}
+"%"			                    {printf("\t%-30s : %3d\n",yytext,MODULO);}
+"<"			                    {printf("\t%-30s : %3d\n",yytext,LS_THAN);}
+">"			                    {printf("\t%-30s : %3d\n",yytext,GR_THAN);}
+.                               {printf("Line %3d: Illegal character %s\n",yylineno,yytext);}
+
+%%
+
+int main()
+{
+  yyin=fopen("testcases/test-case-5.c","r");
+  symbol_table=create_table();
+  constant_table=create_table();
+  yylex();
+  printf("\n\tSymbol table");
+  display(symbol_table);
+  printf("\n\tConstants Table");
+  display(constant_table);
+  printf("NOTE: Please refer tokens.h for token meanings\n");
 }
