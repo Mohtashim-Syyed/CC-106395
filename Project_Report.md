@@ -147,13 +147,8 @@ Whitespace characters (' ', '\t', '\r', '\n') are skipped outside of tokens.
 -  Yacc
 -  Linux Operating Environment
 
-##Problems Faced##
-Replace this text with the explaination of the problems you faced in the project, and how you resolved them. Again you can give each of your problems a heading of level 3.
-
-###Problem 1: I don't know how to Code###
-Transfer yourself to social sciences department. Blah blah blah. This is an example. Replace it with your own problem description and how you resolved it.
-Don't just blindly copy paste this report. This is a sample template file.
-
+## Problems Faced ##
+We didn't really face much problems while making this program as all the concepts which are used in our program were well explained in classes but the only thing which we found a bit difficult was using the Flex and Yacc for the first time.
 
 ## REFERENCES ##
 
