@@ -1,4 +1,4 @@
-# CC Spring 2021: Project Phase 2 #
+# CC Spring 2021: Project Phase 3 #
 ### PROJECT MEMBERS ###
 StdID | Name
 ------------ | -------------
