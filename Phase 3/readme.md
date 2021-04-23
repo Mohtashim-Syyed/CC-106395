@@ -23,11 +23,11 @@ of his input, together with code to be invoked as each such structure is recogni
 
 The structure of our Yacc script is given below; Our file is divided into three sections which are as follows:    
 
--Definition section      
+- Definition section      
       
--Rules section    
+- Rules section    
 
--C code section     
+- C code section     
 
 The definition section is used to define any parameters for the C program, any
 header files to be included and global variable declarations. We also define all
