@@ -142,7 +142,7 @@ CHAR = <unicode character, as in Java>
 Whitespace characters (' ', '\t', '\r', '\n') are skipped outside of tokens. 
  ```
 
-###Approach###
+### Approach ###
 -  Flex
 -  Yacc
 -  Linux Operating Environment
@@ -155,7 +155,7 @@ Transfer yourself to social sciences department. Blah blah blah. This is an exam
 Don't just blindly copy paste this report. This is a sample template file.
 
 
-##References##
+## References ##
 - Mention and add [links](https://guides.github.com/features/mastering-markdown/), references, books, research papers, code samples, you used to get help in the project.
 - Use bullets like this.
 - Mention all references. Plagiarism will not be tolerated.
