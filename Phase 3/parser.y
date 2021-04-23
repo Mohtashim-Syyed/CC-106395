@@ -1,221 +1,351 @@
-/* The file describes the grammar for our parser */
 %{
-    // Header files
-    #include<stdio.h>
-	  #include<stdlib.h>
-	  #include "tables.h"
+void yyerror(char* s);
+int yylex();
+#include "stdio.h"
+#include "stdlib.h"
+#include "ctype.h"
+#include "string.h"
+void ins();
+void insV();
+int flag=0;
+extern char curid[20];
+extern char curtype[20];
+extern char curval[20];
+#define ANSI_COLOR_RED "\x1b[31m"
+#define ANSI_COLOR_GREEN "\x1b[32m"
+#define ANSI_COLOR_CYAN "\x1b[36m"
+#define ANSI_COLOR_RESET "\x1b[0m"
 
-    // Initialising Symbol table and constant table
-    entry **SymbolTable = NULL;
-    entry **ConstantTable = NULL;
-
-    int yyerror(char *msg);
-    char* curr_data_type;
-    int yylex(void);
 %}
 
-// Data types of tokens
-%union{
-  	char *str;
-  	entry *tbEntry;
-  	double dval;
-}
+%nonassoc IF
+%token INT CHAR FLOAT DOUBLE LONG SHORT SIGNED UNSIGNED STRUCT
+%token RETURN MAIN
+%token VOID
+%token WHILE FOR DO
+%token BREAK
+%token ENDIF
+%expect 2
 
-/* Operators */
-%token ADD SUBTRACT MULTIPLY DIVIDE ASSIGN ADD_ASSIGN SUB_ASSIGN MUL_ASSIGN DIV_ASSIGN MOD_ASSIGN  MOD
-/* Relational Operators */
-%token GREATER_THAN LESSER_THAN LESS_EQ GREATER_EQ NOT_EQ EQUAL
-/* Keywords */
-%token VOID IF ELSE FOR DO WHILE GOTO BREAK CONTINUE RETURN 
-/* Data types */
-%token INT SHORT LONG CHAR 
-/* Logical Operators */
-%token LG_OR LG_AND NOT
-/* Assignment Operators */
-%token DECREMENT INCREMENT
-/* Constants */
-%token <dval> HEX_CONSTANT DEC_CONSTANT INT_CONSTANT
-/* String */
-%token <str> STRING
-/* Identifier */
-%token <tbEntry> IDENTIFIER
+%token identifier
+%token integer_constant string_constant float_constant character_constant
 
-%type <dval> expression unaryExpression unaryRelExpression simpleExpression andExpression
- sumExpression relExpression term factor mutable immutable call
- %type <dval> const_type
+%nonassoc ELSE
+
+%right leftshift_assignment_operator rightshift_assignment_operator
+%right XOR_assignment_operator OR_assignment_operator
+%right AND_assignment_operator modulo_assignment_operator
+%right multiplication_assignment_operator division_assignment_operator
+%right addition_assignment_operator subtraction_assignment_operator
+%right assignment_operator
+
+%left OR_operator
+%left AND_operator
+%left pipe_operator
+%left caret_operator
+%left amp_operator
+%left equality_operator inequality_operator
+%left lessthan_assignment_operator lessthan_operator greaterthan_assignment_operator greaterthan_operator
+%left leftshift_operator rightshift_operator
+%left add_operator subtract_operator
+%left multiplication_operator division_operator modulo_operator
+
+%right SIZEOF
+%right tilde_operator exclamation_operator
+%left increment_operator decrement_operator
 
 
-// Start Symbol of the grammar
 %start program
 
-/* Precedence of Operators */
-%left ','
-%right ASSIGN
-%left LG_OR
-%left LG_AND
-%left EQUAL NOT_EQ
-%left LESSER_THAN GREATER_THAN LESS_EQ GREATER_EQ
-%left ADD SUBTRACT
-%left MULTIPLY DIVIDE MOD
-%right NOT
-
-
-%nonassoc IFX
-%nonassoc ELSE
 %%
-    /* Program is made up of declarations */
-    program : declarationList;
-    // Program can have multiple declarations
-    declarationList : declarationList declaration | declaration;
-    // Types of declaration in C
-    declaration : varDeclaration | funDeclaration ;
-    // Variable declarations
-    /* Variable declaration can be a list */
-    varDeclaration : typeSpecifier varDeclList ';' ;
-    // Variables can also be initialised during declaration
-    varDeclList : varDeclList ',' varDeclInitialize | varDeclInitialize;
-    // Assigment can be through a simple expression or conditional statement
-    varDeclInitialize : varDecId | varDecId ASSIGN simpleExpression ;
-    varDecId : IDENTIFIER {$1->data_type = curr_data_type;} | IDENTIFIER '[' INT_CONSTANT ']';
-    typeSpecifier : typeSpecifier pointer
-                  | INT {curr_data_type = strdup("INT");}
-                  | VOID
-                  | CHAR {curr_data_type = strdup("CHAR");}
-                  ;
+program
+: declaration_list;
 
-    //assignmentExpression : conditionalStmt | unaryExpression assignmentOperator assignmentExpression ;
-    //assignmentOperator : ASSIGN | ADD_ASSIGN | SUB_ASSIGN |MUL_ASSIGN|DIV_ASSIGN|MOD_ASSIGN;
-    // Types for constants
+declaration_list
+: declaration D
 
+D
+: declaration_list
+| ;
 
-    // Pointer declaration
-    pointer : MULTIPLY pointer | MULTIPLY;
+declaration
+: variable_declaration
+| function_declaration
+| structure_definition;
 
-    // Function declaration
-    funDeclaration : typeSpecifier IDENTIFIER '(' params ')' statement | IDENTIFIER '(' params ')' statement ;
-    
-     // Rules for parameter list
-    params : paramList | ;
-    paramList : paramList ',' paramTypeList | paramTypeList;
-    paramTypeList : typeSpecifier paramId;
-    paramId : IDENTIFIER | IDENTIFIER '[' ']';
-    
-    // Types os statements in C
-    statement : expressionStmt  | compoundStmt  | selectionStmt | iterationStmt | jumpStmt | returnStmt | breakStmt | varDeclaration ;
+variable_declaration
+: type_specifier variable_declaration_list ';'
+| structure_declaration;
 
-    // compound statements produces a list of statements with its local declarations
-    compoundStmt : '{' statementList '}' ;
-    statementList : statementList statement
-                  |  ;
-    // Expressions
-    expressionStmt : expression ';' | ';' ;
-    selectionStmt : IF '(' simpleExpression ')' statement %prec IFX
-                  | IF '(' simpleExpression ')' statement ELSE statement
-                  ;
+variable_declaration_list
+: variable_declaration_identifier V;
 
-    iterationStmt : WHILE '(' simpleExpression ')' statement
-                  | DO statement WHILE '(' expression ')' ';'
-                  | FOR '(' optExpression ';' optExpression ';' optExpression ')' statement;
-    // Optional expressions in case of for
-    optExpression : expression | ;
+V
+: ',' variable_declaration_list
+| ;
 
-    jumpStmt : GOTO IDENTIFIER ';' | CONTINUE ';' ;
-    returnStmt : RETURN ';'
-               | RETURN expression ;
-    breakStmt : BREAK ';' ;
+variable_declaration_identifier
+: identifier { ins(); } vdi;
 
-    expression : mutable ASSIGN expression {$1 = $3;}
-               | mutable ADD_ASSIGN expression {$1 = $1+$3;}
-               | mutable SUB_ASSIGN expression  { $1 = $1-$3;}
-               | mutable MUL_ASSIGN expression { $1 = $1*$3;}
-               | mutable DIV_ASSIGN expression {$1 = $1/ $3;}
-               | mutable INCREMENT { $1 = $1+1;}
-               | mutable DECREMENT {  $1 = $1-1;}
-               | simpleExpression  {$$=$1;}
-               ;
+vdi : identifier_array_type | assignment_operator expression ;
 
-    simpleExpression : simpleExpression LG_OR andExpression {$$ = $1 || $3;}
-                     | andExpression{$$=$1;};
+identifier_array_type
+: '[' initilization_params
+| ;
 
-    andExpression : andExpression LG_AND unaryRelExpression {$$ = $1 && $3;}
-                  | unaryRelExpression {$$=$1;};
+initilization_params
+: integer_constant ']' initilization
+| ']' string_initilization;
 
-    unaryRelExpression : NOT unaryRelExpression {$$ = (!$2);}
-                       | relExpression {$$=$1;} ;
+initilization
+: string_initilization
+| array_initialization
+| ;
 
-    relExpression : sumExpression GREATER_THAN sumExpression {$$ = ($1 > $3); printf("%f",$$);}
-                  | sumExpression LESSER_THAN sumExpression  {$$ = ($1 < $3);}
-                  | sumExpression LESS_EQ sumExpression  {$$ = ($1 <= $3);}
-                  | sumExpression GREATER_EQ sumExpression {$$ = ($1 >= $3);}
-                  | sumExpression NOT_EQ sumExpression {$$ = ($1 != $3);}
-                  | sumExpression EQUAL sumExpression {$$ = ($1 == $3);}
-                  | sumExpression {$$=$1;}
-                  ;
-    sumExpression : sumExpression ADD term {$$ = ($1 + $3); printf("%f",$$);}
-                  | sumExpression SUBTRACT term {$$ = $1 - $3;}
-                  | term {$$=$1;}
-                  ;
+type_specifier
+: INT | CHAR | FLOAT | DOUBLE
+| LONG long_grammar
+| SHORT short_grammar
+| UNSIGNED unsigned_grammar
+| SIGNED signed_grammar
+| VOID ;
 
-    //sumop : ADD | SUBTRACT ;
+unsigned_grammar
+: INT | LONG long_grammar | SHORT short_grammar | ;
 
-     term : term MULTIPLY unaryExpression {$$ = $1 * $3;}
-         | term DIVIDE unaryExpression {$$ = $1 / $3;}
-         | unaryExpression {$$=$1;}
-         ;
+signed_grammar
+: INT | LONG long_grammar | SHORT short_grammar | ;
 
-    unaryExpression : ADD unaryExpression {$$=+$2;}
-                    | SUBTRACT unaryExpression {$$=-$2;}
-                    | factor {$$=$1;};
+long_grammar
+: INT | ;
+
+short_grammar
+: INT | ;
+
+structure_definition
+: STRUCT identifier { ins(); } '{' V1  '}' ';';
+
+V1 : variable_declaration V1 | ;
+
+structure_declaration
+: STRUCT identifier variable_declaration_list;
 
 
-    factor : immutable {$$=$1;} | mutable {$$=$1;} ;
-    mutable : IDENTIFIER {$$=$1->value;}| mutable '[' expression ']'{$$=0;} ;
-    immutable : '(' expression ')' {$$=$2;} | call {$$=$1;}| const_type {$$=$1;};
-    call : IDENTIFIER '(' args ')'{$$=0;} ;
-    args : argList | ;
-    argList : argList ',' expression | expression;
+function_declaration
+: function_declaration_type function_declaration_param_statement;
 
-    const_type : DEC_CONSTANT { $$ = $1;}
-               | INT_CONSTANT { $$ = $1;}
-               | HEX_CONSTANT { $$ = $1;}
-             
-               ;
+function_declaration_type
+: type_specifier identifier '('  { ins();};
+
+function_declaration_param_statement
+: params ')' statement;
+
+params
+: parameters_list | ;
+
+parameters_list
+: type_specifier parameters_identifier_list;
+
+parameters_identifier_list
+: param_identifier parameters_identifier_list_breakup;
+
+parameters_identifier_list_breakup
+: ',' parameters_list
+| ;
+
+param_identifier
+: identifier { ins(); } param_identifier_breakup;
+
+param_identifier_breakup
+: '[' ']'
+| ;
+
+statement
+: expression_statment | compound_statement
+| conditional_statements | iterative_statements
+| return_statement | break_statement
+| variable_declaration;
+
+compound_statement
+: '{' statment_list '}' ;
+
+statment_list
+: statement statment_list
+| ;
+
+expression_statment
+: expression ';'
+| ';' ;
+
+conditional_statements
+: IF '(' simple_expression ')' statement conditional_statements_breakup;
+
+conditional_statements_breakup
+: ELSE statement
+| ;
+
+iterative_statements
+: WHILE '(' simple_expression ')' statement
+| FOR '(' expression ';' simple_expression ';' expression ')'
+| DO statement WHILE '(' simple_expression ')' ';';
+
+return_statement
+: RETURN return_statement_breakup;
+
+return_statement_breakup
+: ';'
+| expression ';' ;
+
+break_statement
+: BREAK ';' ;
+
+string_initilization
+: assignment_operator string_constant { insV(); };
+
+array_initialization
+: assignment_operator '{' array_int_declarations '}';
+
+array_int_declarations
+: integer_constant array_int_declarations_breakup;
+
+array_int_declarations_breakup
+: ',' array_int_declarations
+| ;
+
+expression
+: mutable expression_breakup
+| simple_expression ;
+
+expression_breakup
+: assignment_operator expression
+| addition_assignment_operator expression
+| subtraction_assignment_operator expression
+| multiplication_assignment_operator expression
+| division_assignment_operator expression
+| modulo_assignment_operator expression
+| increment_operator
+| decrement_operator ;
+
+simple_expression
+: and_expression simple_expression_breakup;
+
+simple_expression_breakup
+: OR_operator and_expression simple_expression_breakup | ;
+
+and_expression
+: unary_relation_expression and_expression_breakup;
+
+and_expression_breakup
+: AND_operator unary_relation_expression and_expression_breakup
+| ;
+
+unary_relation_expression
+: exclamation_operator unary_relation_expression
+| regular_expression ;
+
+regular_expression
+: sum_expression regular_expression_breakup;
+
+regular_expression_breakup
+: relational_operators sum_expression
+| ;
+
+relational_operators
+: greaterthan_assignment_operator | lessthan_assignment_operator | greaterthan_operator
+| lessthan_operator | equality_operator | inequality_operator ;
+
+sum_expression
+: sum_expression sum_operators term
+| term ;
+
+sum_operators
+: add_operator
+| subtract_operator ;
+
+term
+: term MULOP factor
+| factor ;
+
+MULOP
+: multiplication_operator | division_operator | modulo_operator ;
+
+factor
+: immutable | mutable ;
+
+mutable
+: identifier
+| mutable mutable_breakup;
+
+mutable_breakup
+: '[' expression ']'
+| '.' identifier;
+
+immutable
+: '(' expression ')'
+| call | constant;
+
+call
+: identifier '(' arguments ')';
+
+arguments
+: arguments_list | ;
+
+arguments_list
+: expression A;
+
+A
+: ',' expression A
+| ;
+
+constant
+: integer_constant { insV(); }
+| string_constant { insV(); }
+| float_constant { insV(); }
+| character_constant{ insV(); };
+
 %%
 
-void disp()
+extern FILE *yyin;
+extern int yylineno;
+extern char *yytext;
+void insertSTtype(char *,char *);
+void insertSTvalue(char *, char *);
+void incertCT(char *, char *);
+void printST();
+void printCT();
+
+int main(int argc , char **argv)
 {
-    printf("\n\tSymbol table");
-    Display(SymbolTable);
-    printf("\n\tConstant table");
-    Display(ConstantTable);
+yyin = fopen(argv[1], "r");
+yyparse();
+
+if(flag == 0)
+{
+printf(ANSI_COLOR_GREEN "Status: Parsing Complete - The Entered Program was Valid" ANSI_COLOR_RESET "\n");
+printf("%30s" ANSI_COLOR_CYAN "Result After Parsing" ANSI_COLOR_RESET "\n", " ");
+printf("%30s %s\n", " ", "------------");
+printST();
+}
 }
 
-#include "lex.yy.c"
-int main(int argc , char *argv[]){
-
-    SymbolTable = CreateTable();
-    ConstantTable = CreateTable();
-
-    // Open a file for parsing
-    yyin = fopen(argv[1], "r");
-
-    if(!yyparse())
-    {
-        printf("\nParsing complete.\n");
-        disp();
-    }
-    else
-    {
-            printf("\nParsing failed.\n");
-    }
-
-    fclose(yyin);
-    return 0;
+void yyerror(char *s)
+{
+printf("%d %s %s\n", yylineno, s, yytext);
+flag=1;
+printf(ANSI_COLOR_RED "Status: Parsing Failed - The Entered Program was Invalid\n" ANSI_COLOR_RESET);
 }
 
-int yyerror(char *msg)
+void ins()
 {
-  // Function to display error messages with line no and token
-    printf("Line no: %d Error message: %s Token: %s\n", yylineno, msg, yytext);
-    return 0;
+insertSTtype(curid,curtype);
+}
+
+void insV()
+{
+insertSTvalue(curid,curval);
+}
+
+int yywrap()
+{
+return 1;
 }
