@@ -1,12 +1,12 @@
 %{
+    #include<stdio.h>
+    #include<stdlib.h>
 
-#include <stdlib.h>
-#include <stdio.h>
 
-entry_t** symbol_table;
-entry_t** constant_table;
-int cmnt_strt = 0;
+    entry **SymbolTable = NULL;
+    entry **ConstantTable = NULL;
 
+    int ErrFlag = 0;
 %}
 
  #define KEYWORD 1
@@ -22,103 +22,183 @@ int cmnt_strt = 0;
  #define INTEGER_LITERAL 11
  #define FLOATING_POINT_LITERAL 12
  #define STRING_LITERAL 13
+
+ /* Declarations */
+
 letter [a-zA-Z]
 digit [0-9]
-ws  [ \t\r\f\v]+
-identifier (_|{letter})({letter}|{digit}|_){0,31}
-hex [0-9a-f]
+whitespace [ \t\r\f\v]+
+identifier (_|{letter})({letter}|{digit}|_)*
+hex [0-9a-fA-F]
 
- /* Exclusive states */
-%x CMNT
-%x PREPROC
+
+ /* States */
+
+%x PREPROCESSOR
+%x MACROPREPROCESSOR
+%x COMMENT
+%x SLCOMMENT
 
 %%
-  /* Keywords*/
-"int"                             {printf("\t%-30s : %3d\n",yytext,INT);}
-"long"                            {printf("\t%-30s : %3d\n",yytext,LONG);}
-"long long"                       {printf("\t%-30s : %3d\n",yytext,LONG_LONG);}
-"short"                           {printf("\t%-30s : %3d\n",yytext,SHORT);}
-"signed"                          {printf("\t%-30s : %3d\n",yytext,SIGNED);}
-"unsigned"                        {printf("\t%-30s : %3d\n",yytext,UNSIGNED);}
-"for"                             {printf("\t%-30s : %3d\n",yytext,FOR);}
-"break"                           {printf("\t%-30s : %3d\n",yytext,BREAK);}
-"continue"                        {printf("\t%-30s : %3d\n",yytext,CONTINUE);}
-"if"                              {printf("\t%-30s : %3d\n",yytext,IF);}
-"else"                            {printf("\t%-30s : %3d\n",yytext,ELSE);}
-"return"                          {printf("\t%-30s : %3d\n",yytext,RETURN);}
 
-{identifier}                      {printf("\t%-30s : %3d\n", yytext,IDENTIFIER);
-                                  insert( symbol_table,yytext,IDENTIFIER );}
-{ws}                              ;
-[+\-]?[0][x|X]{hex}+[lLuU]?        {printf("\t%-30s : %3d\n", yytext,HEX_CONSTANT);
-									insert( constant_table,yytext,HEX_CONSTANT);}
-[+\-]?{digit}+[lLuU]?              {printf("\t%-30s : %3d\n", yytext,DEC_CONSTANT);
-									insert( constant_table,yytext,DEC_CONSTANT);}
-"/*"                              {cmnt_strt = yylineno; BEGIN CMNT;}
-<CMNT>.|{ws}                      ;
-<CMNT>\n                          {yylineno++;}
-<CMNT>"*/"                        {BEGIN INITIAL;}
-<CMNT>"/*"                        {printf("Line %3d: Nested comments are not valid!\n",yylineno);}
-<CMNT><<EOF>>                     {printf("Line %3d: Unterminated comment\n", cmnt_strt); yyterminate();}
-^"#include"                       {BEGIN PREPROC;}
-<PREPROC>"<"[^<>\n]+">"            {printf("\t%-30s : %3d\n",yytext,HEADER_FILE);}
-<PREPROC>{ws}                       ;
-<PREPROC>\"[^"\n]+\"              {printf("\t%-30s : %3d\n",yytext,HEADER_FILE);}
-<PREPROC>\n                       {yylineno++; BEGIN INITIAL;}
-<PREPROC>.                        {printf("Line %3d: Illegal header file format \n",yylineno);}
-"//".*                            ;
 
-\"[^\"\n]*\"     {
+ /* Keywords */
 
-  if(yytext[yyleng-2]=='\\') /* check if it was an escaped quote */
+"int"                               {printf("\t%-50s : Keyword\n", yytext);InsertEntry(SymbolTable,yytext,"KEYWORD");}
+"short"                             {printf("\t%-50s : Keyword\n", yytext);InsertEntry(SymbolTable,yytext,"KEYWORD");}
+"long"                              {printf("\t%-50s : Keyword\n", yytext);InsertEntry(SymbolTable,yytext,"KEYWORD");}
+"char"                              {printf("\t%-50s : Keyword\n", yytext);InsertEntry(SymbolTable,yytext,"KEYWORD");}
+"signed"                            {printf("\t%-50s : Keyword\n", yytext);InsertEntry(SymbolTable,yytext,"KEYWORD");}
+"unsigned"                          {printf("\t%-50s : Keyword\n", yytext);InsertEntry(SymbolTable,yytext,"KEYWORD");}
+"void"                              {printf("\t%-50s : Keyword\n", yytext);InsertEntry(SymbolTable,yytext,"KEYWORD");}
+"if"                                {printf("\t%-50s : Keyword\n", yytext);InsertEntry(SymbolTable,yytext,"KEYWORD");}
+"else"                              {printf("\t%-50s : Keyword\n", yytext);InsertEntry(SymbolTable,yytext,"KEYWORD");}
+"for"                               {printf("\t%-50s : Keyword\n", yytext);InsertEntry(SymbolTable,yytext,"KEYWORD");}
+"do"                                {printf("\t%-50s : Keyword\n", yytext);InsertEntry(SymbolTable,yytext,"KEYWORD");}
+"while"                             {printf("\t%-50s : Keyword\n", yytext);InsertEntry(SymbolTable,yytext,"KEYWORD");}
+"goto"                              {printf("\t%-50s : Keyword\n", yytext);InsertEntry(SymbolTable,yytext,"KEYWORD");}
+"break"                             {printf("\t%-50s : Keyword\n", yytext);InsertEntry(SymbolTable,yytext,"KEYWORD");}
+"continue"                          {printf("\t%-50s : Keyword\n", yytext);InsertEntry(SymbolTable,yytext,"KEYWORD");}
+"main"                              {printf("\t%-50s : Keyword\n", yytext);InsertEntry(SymbolTable,yytext,"KEYWORD");}
+"return"                            {printf("\t%-50s : Keyword\n", yytext);InsertEntry(SymbolTable,yytext,"KEYWORD");}
+
+
+ /* Constants */
+
+[+/-]?[0][x|X]{hex}+                {printf("\t%-50s : Hexadecimal Constant\n", yytext); InsertEntry(ConstantTable,yytext,"HEX_CONSTANT");}
+[+/-]?{digit}+                      {printf("\t%-50s : Integer Constant\n", yytext); InsertEntry(ConstantTable,yytext,"INT_CONSTANT");}
+[+/-]?({digit}*)["."]({digit}+)     {printf("\t%-50s : Decimal Constant\n", yytext); InsertEntry(ConstantTable,yytext,"DEC_CONSTANT");}
+[+/-]?({digit}+)["."]({digit}*)     {printf("\t%-50s : Decimal Constant\n", yytext); InsertEntry(ConstantTable,yytext,"DEC_CONSTANT");}
+
+{identifier} {
+  if(strlen(yytext) <= 32)
+    {
+      printf("\t%-50s : Identifier\n", yytext);
+      InsertEntry(SymbolTable,yytext,"IDENTIFIER");
+    }
+  else
   {
-    yyless(yyleng-1);       /* push the quote back if it was escaped */
+      printf("Error %d: Identifier too long,must be between 1 to 32 characters\n", yylineno);
+      ErrFlag = 1;
+  }
+}
+
+
+{digit}+({letter}|_)+               {printf("Error %d: Illegal identifier format\n", yylineno); ErrFlag = 1;}
+{whitespace}                        ;
+
+
+ /* Preprocessor Directives */
+
+^"#include"                         {BEGIN PREPROCESSOR;}
+<PREPROCESSOR>{whitespace}          ;
+<PREPROCESSOR>"<"[^<>\n]*">"        {printf("\t%-50s : Preprocessor directive\n", yytext); BEGIN INITIAL;}
+<PREPROCESSOR>\"[^<>\n]*\"          {printf("\t%-50s : Preprocessor directive\n", yytext); BEGIN INITIAL;}
+<PREPROCESSOR>"\n"                  {printf("Error %d: Header format not allowed\n", yylineno); yylineno++; BEGIN INITIAL;ErrFlag=1;}
+<PREPROCESSOR>.                     {printf("Error %d: Header format not allowed\n", yylineno); ErrFlag=1;}
+
+
+ /* Macropreprocessor Directives */
+
+^"#define"                                        {BEGIN MACROPREPROCESSOR;}
+<MACROPREPROCESSOR>{whitespace}                   ;
+<MACROPREPROCESSOR>({letter})({letter}|{digit})*  {printf("\t%-50s : Macropreprocessor directive\n", yytext); BEGIN INITIAL;}
+<MACROPREPROCESSOR>\n                             {yylineno++; BEGIN INITIAL;}
+<MACROPREPROCESSOR>.                              {printf("Error %d: Invalid definition\n", yylineno); BEGIN INITIAL;ErrFlag=1;}
+
+
+ /* Comments */
+
+"/*"                                {BEGIN COMMENT;}
+<COMMENT>.|{whitespace}             ;
+<COMMENT>\n                         {yylineno++;}
+<COMMENT>"*/"                       {BEGIN INITIAL;}
+<COMMENT>"/*"                       {printf("Error %d: Nested comments are invalid\n", yylineno); ErrFlag=1;yyterminate();}
+<COMMENT><<EOF>>                    {printf("Error %d: Unterminated comments are invalid\n", yylineno);ErrFlag=1; yyterminate();}
+"//"                                {BEGIN SLCOMMENT;}
+<SLCOMMENT>.                        ;
+<SLCOMMENT>\n                       {yylineno++; BEGIN INITIAL;}
+
+
+ /* Operators */
+
+"+"                                 {printf("\t%-50s : Arithmetic Operator\n", yytext);}
+"-"                                 {printf("\t%-50s : Arithmetic Operator\n", yytext);}
+"*"                                 {printf("\t%-50s : Arithmetic Operator\n", yytext);}
+"/"                                 {printf("\t%-50s : Arithmetic Operator\n", yytext);}
+"="                                 {printf("\t%-50s : Assignment Operator\n", yytext);}
+"--"                                {printf("\t%-50s : Decrement Operator\n", yytext);}
+"++"                                {printf("\t%-50s : Increment Operator\n", yytext);}
+
+">"                                 {printf("\t%-50s : Comparison Operator\n", yytext);}
+"<"                                 {printf("\t%-50s : Comparison Operator\n", yytext);}
+">="                                {printf("\t%-50s : Comparison Operator\n", yytext);}
+"<="                                {printf("\t%-50s : Comparison Operator\n", yytext);}
+"=="                                {printf("\t%-50s : Comparison Operator\n", yytext);}
+
+"||"                                {printf("\t%-50s : Boolean Operator\n", yytext);}
+"&&"                                {printf("\t%-50s : Boolean Operator\n", yytext);}
+"!"                                 {printf("\t%-50s : Boolean Operator\n", yytext);}
+
+
+ /* Strings and Characters */
+
+\"[^\"\n]*$                         {printf("Error %d: Illegally terminated string\n", yylineno);ErrFlag=1; yyterminate();}
+\"[^\"\n]*\" {
+  if(yytext[yyleng-2]=='\\') {
+    yyless(yyleng-1);
     yymore();
   }
   else
-  insert( constant_table,yytext,STRING);
- }
+  {
+    InsertEntry(ConstantTable,yytext,"STRING");
+    printf("\t%-50s : String\n", yytext);
+  }
+}
 
-\"[^\"\n]*$                     {printf("Line %3d: Unterminated string %s\n",yylineno,yytext);}
-{digit}+({letter}|_)+	        {printf("Line %3d: Illegal identifier name %s\n",yylineno,yytext);}
-\n                              {yylineno++;}
-"--"			                {printf("\t%-30s : %3d\n",yytext,DECREMENT);}
-"++"			                {printf("\t%-30s : %3d\n",yytext,INCREMENT);}
-"->"			                {printf("\t%-30s : %3d\n",yytext,PTR_SELECT);}
-"&&"			                {printf("\t%-30s : %3d\n",yytext,LOGICAL_AND);}
-"||"			                {printf("\t%-30s : %3d\n",yytext,LOGICAL_OR);}
-"<="			                {printf("\t%-30s : %3d\n",yytext,LS_THAN_EQ);}
-">="			                {printf("\t%-30s : %3d\n",yytext,GR_THAN_EQ);}
-"=="			                {printf("\t%-30s : %3d\n",yytext,EQ);}
-"!="		                    {printf("\t%-30s : %3d\n",yytext,NOT_EQ);}
-";"			                    {printf("\t%-30s : %3d\n",yytext,DELIMITER);}
-"{"                             {printf("\t%-30s : %3d\n",yytext,OPEN_BRACES);}
-"}"                             {printf("\t%-30s : %3d\n",yytext,CLOSE_BRACES);}
-","			                    {printf("\t%-30s : %3d\n",yytext,COMMA);}
-"="			                    {printf("\t%-30s : %3d\n",yytext,ASSIGN);}
-"("			                    {printf("\t%-30s : %3d\n",yytext,OPEN_PAR);}
-")"			                    {printf("\t%-30s : %3d\n",yytext,CLOSE_PAR);}
-"["                             {printf("\t%-30s : %3d\n",yytext,OPEN_SQ_BRKT);}
-"]"                             {printf("\t%-30s : %3d\n",yytext,CLOSE_SQ_BRKT);}
-"-"			                    {printf("\t%-30s : %3d\n",yytext,MINUS);}
-"+"			                    {printf("\t%-30s : %3d\n",yytext,PLUS);}
-"*"			                    {printf("\t%-30s : %3d\n",yytext,STAR);}
-"/"		                        {printf("\t%-30s : %3d\n",yytext,FW_SLASH);}
-"%"			                    {printf("\t%-30s : %3d\n",yytext,MODULO);}
-"<"			                    {printf("\t%-30s : %3d\n",yytext,LS_THAN);}
-">"			                    {printf("\t%-30s : %3d\n",yytext,GR_THAN);}
-.                               {printf("Line %3d: Illegal character %s\n",yylineno,yytext);}
+\'[^\'\n]\'                         {printf("\t%-50s : Character\n", yytext);}
+
+
+ /* Punctuators */
+
+
+"["                                 {printf("\t%-50s : Open Square Bracket\n", yytext);}
+"]"                                 {printf("\t%-50s : Closed Square Bracket\n", yytext);}
+"{"                                 {printf("\t%-50s : Open Curly Bracket\n", yytext);}
+"}"                                 {printf("\t%-50s : Closed Curly Bracket\n", yytext);}
+"("                                 {printf("\t%-50s : Open Round Bracket\n", yytext);}
+")"                                 {printf("\t%-50s : Closed Round Bracket\n", yytext);}
+","                                 {printf("\t%-50s : Comma\n", yytext);}
+";"                                 {printf("\t%-50s : Delimiter\n", yytext);}
+"&"                                 {printf("\t%-50s : Ampersand\n",yytext);}
+
+"\n"                                {yylineno++;}
+.                                   {printf("Error %d: Illegal character\n", yylineno);ErrFlag=1;}
+
 
 %%
 
-int main()
+
+int main(int argc, char *argv[])
 {
-  symbol_table=create_table();
-  constant_table=create_table();
+  SymbolTable = CreateTable();
+  ConstantTable = CreateTable();
+  FILE *fh;
+  if (argc == 2 && (fh = fopen(argv[1], "r")))
+        yyin = fh;
   yylex();
-  printf("\n\tSymbol table");
-  display(symbol_table);
-  printf("\n\tConstants Table");
-  display(constant_table);
-  printf("NOTE: Please refer tokens.h for token meanings\n");
+
+  if (ErrFlag == 0)
+  {
+    printf("\nPrinting Symbol Table\n" );
+    Display(SymbolTable);
+    printf("\n\n");
+    printf("Printing Constant Table\n" );
+    Display(ConstantTable);
+  }
+
+  printf("Lexical analysis finished\n");
+  return 0;
 }
+
+int yywrap(){return 1;}
