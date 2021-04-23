@@ -6,27 +6,146 @@ StdID | Name
 **63152** | **Syed Muhammad Mohtashim kamal** <!--this is the group leader in bold-->
 63433 | Yousuf Muhammad Khan
 <!-- Replace name and student ids with acutal group member names and ids-->
-## Project Description ##
-Replace this text with the description of your project. Tell what the project was about. What you aimed to deliver in the project.
+**Mini** C is both a subset of the C programming language, suitable for resource-limited microcomputers and embedded systems, and an implementation of that subset. Originally valuable as an early compiler for microcomputer systems available during the late 1970s and early 1980s, the implementation has also been useful as an example simple enough for teaching purposes.
 
-##Sample Language Used ##
-Replace this text with the desription of what was your sample language. You may include some code examples of loops, if and simple statements
-```C++
-#include <some code examples.h>
-printf("This is a loop example!");
-for(int i=0; i<10 ; i++){
-    printf("Please Allah Forgive me. I cheated in exam while fasting!");
-}
+## Sample Constructs Of The Language ##
+
+### Variable Declaratrion ##
+
+**Declaration** | **Meaning**
+------------ | -------------
+int n | n is an integer
+int *p| p is a pointer to integer
+int a[3]| a is array of 3 integers
+int *i[4]| i is array of 4 pointers to integers
+
+
+### Declaratrion Of Global Function ##
 ```
-###Lexical Specification###
-Replace this text with a complete lexical specification of your selected programming language.
+void swap(int *x, int *y) { ... }
+```
 
-###Grammar###
-Replace this text with a complete GRAMMAR of your selected language
+### Expressions ##
+```
+(*p + 1) * 12
+```
+### Statements ##
+```
+if (x != 0) y = 1/x;
+```
 
+### Function ##
+
+**Calculating Factorial**
+```
+void main(int i) {
+int r;
+fac(i, &r);
+print r;
+}
+void fac(int n, int *res) {
+if (n == 0)
+*res = 1;
+else {
+int tmp;
+fac(n-1, &tmp);
+*res = tmp * n;
+}
+}  
+```
+### For Loop ##
+```
+int main() {
+  int i;
+  for (i = 1; i < 11; ++i)
+  {
+    printf("%d ", i);
+  }
+  return 0;
+}
+ 
+```
+
+## Lexical Specification ##
+```
+<id> ::= <letter> { <letter> | <digit> | "_" }
+<literal> ::= <integer literal> | <real literal> | <string literal>
+<integer literal> ::= <digits>
+<digits> ::= <digit> { <digit> }
+<real literal> ::= <digits> "." <digits> [ "e" [ <sign> ] <digits>]
+<string literal> ::= "\"" { < a char or escape char > } "\""
+<letter> ::= a | b | c | d | e | f | g | h | i | j | k | l | m | n | o |
+p | q | r | s | t | u | v | w | x | y | z | A | B | C |
+D | E | F | G | H | I | J | K | L | M | N | O | P
+| Q | R | S | T | U | V | W | X | Y | Z
+<digit> ::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+<special symbol or keyword> ::= "+" | "-" | "*" | "%" | "=" | "<>" | "<" | ">" | "<=" | ">=" |
+"(" | ")" | "[" | "]" | ":=" | "." | "," | ";" | ":" | "or" |
+"and" | "not" | "if" | "then" | "else" | "of" | "while" | "do" |
+"begin" | "end" | "var" | "array"
+<predefined id> ::= "Boolean" | "false" | "integer" | "read" | "real" | "size" | "string" | "true" | "printf" | "scanf"
+
+```
+## Language CFG ##
+
+```
+program = statement*
+statement = block
+          | SEMI
+          | assignment
+          | declaration
+          | if
+          | while
+          | 'break' SEMI
+          | 'continue' SEMI
+          | 'exit' '(' ')' SEMI
+          | 'print' parExpression SEMI
+          | 'println' parExpression SEMI
+block = '{' statement* '}'
+expression = literal
+           | ID
+           | ('!' | '-') expression
+           | expression ('*' | '/' | '%') expression
+           | expression ('+' | '-') expression
+           | expression ('<' | '>' | '<=' | '>=') expression
+           | expression ('==' | '!=') expression
+           | expression ('&&') expression
+           | expression ('||') expression
+           | parExpression
+           | 'readInt' '(' ')'
+           | 'readDouble' '(' ')'
+           | 'readLine' '(' ')'
+           | 'toString' parExpression
+parExpression = '(' expression ')'
+assignment = ID assignmentOp expression SEMI
+declaration = type ID (assignmentOp expression)? SEMI
+if = 'if' parExpression statement ('else' statement)?
+while = 'while' parExpression statement
+assignmentOp = '='
+type = 'int'
+     | 'double'
+     | 'bool'
+     | 'string'
+literal = IntegerLiteral
+        | FloatingPointLiteral
+        | StringLiteral
+        | BooleanLiteral
+IntegerLiteral = DIGIT+
+FloatingPointLiteral = DIGIT+ '.' DIGIT+
+StringLiteral = '"' (CHAR | '\"')* '"'
+BooleanLiteral = 'true' | 'false'
+SEMI = ';'
+ID = (LETTER | '_') (LETTER | DIGIT | '_')*
+DIGIT = '0' | ... | '9'
+LETTER = 'a' | ... | 'z' | 'A' | ... | 'Z'
+CHAR = <unicode character, as in Java>
+Whitespace characters (' ', '\t', '\r', '\n') are skipped outside of tokens. 
+ ```
 
 ###Approach###
-How you handled the tasks that were given? How your program works? What will you have to do to translate the program to C# code?
+-  Flex
+-  Yacc
+-  Linux Operating Environment
 
 ##Problems Faced##
 Replace this text with the explaination of the problems you faced in the project, and how you resolved them. Again you can give each of your problems a heading of level 3.
@@ -35,11 +154,6 @@ Replace this text with the explaination of the problems you faced in the project
 Transfer yourself to social sciences department. Blah blah blah. This is an example. Replace it with your own problem description and how you resolved it.
 Don't just blindly copy paste this report. This is a sample template file.
 
-###Problem 2: My Parents forced me for a degree###
-If you were not able to convince your parents not to force you for degree and now you are doing it for them, then do it with your best effort and not half heartedly. There is no point wasting this time with finding a loop hole here and there and passing courses without actually learning anything.
-
-###Problem 3: My girlfriend's father won't let me marry her unless I've a degree###
-Replace the heading and text of this to mention the problem you have faced in your project.
 
 ##References##
 - Mention and add [links](https://guides.github.com/features/mastering-markdown/), references, books, research papers, code samples, you used to get help in the project.
