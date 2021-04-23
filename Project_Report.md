@@ -155,11 +155,7 @@ Transfer yourself to social sciences department. Blah blah blah. This is an exam
 Don't just blindly copy paste this report. This is a sample template file.
 
 
-## References ##
-- Mention and add [links](https://guides.github.com/features/mastering-markdown/), references, books, research papers, code samples, you used to get help in the project.
-- Use bullets like this.
-- Mention all references. Plagiarism will not be tolerated.
-- You see markdown is not that difficult.
-- You are CS students not some tom harry from BBA SHE-B-A :-).
-- You can and must learn to use markdown and Github.
-- All future project development will be down in something similar to GITHUB
+## REFERENCES ##
+
+- Mini C Introduction: https://en.wikipedia.org/wiki/Small-C
+- Sample Constructs Of The Language: https://homepage.cs.uiowa.edu/~tinelli/classes/3820/Fall16/notes/chap7-micro-C.pdf
