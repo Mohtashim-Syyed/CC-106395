@@ -33,5 +33,5 @@ the yylex() function.
 
 ## REFERENCES ##
 
-- Lexical Analyzer Introduction: 
-- Process Flow Diagram: 
+- Lexical Analyzer Introduction: https://github.com/gauribaraskar/Mini-C-compiler/blob/master/Report/Report%20-%20Lexical%20Analysis.pdf
+- Process Flow Diagram: https://github.com/gauribaraskar/Mini-C-compiler/blob/master/Report/Report%20-%20Lexical%20Analysis.pdf
