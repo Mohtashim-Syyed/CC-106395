@@ -9,6 +9,19 @@ int cmnt_strt = 0;
 
 %}
 
+ #define KEYWORD 1
+ #define IDENTIFIER 2
+ #define ARITHMETIC_OPERATOR 3
+ #define COMPARISON_OPERATOR 4
+ #define LOGICAL_OPERATOR 5
+ #define ASSIGNMENT_OPERATOR 6
+ #define OPEN_BRACE 7
+ #define CLOSE_BRACE 8
+ #define OPEN_PARE 9
+ #define CLOSE_PARE 10
+ #define INTEGER_LITERAL 11
+ #define FLOATING_POINT_LITERAL 12
+ #define STRING_LITERAL 13
 letter [a-zA-Z]
 digit [0-9]
 ws  [ \t\r\f\v]+
