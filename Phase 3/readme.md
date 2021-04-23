@@ -21,18 +21,13 @@ Yacc stands for Yet Another Compiler-Compiler. Yacc provides a general tool for
 describing the input to a computer program. The Yacc user specifies the structures
 of his input, together with code to be invoked as each such structure is recognized.  
 
-The structure of our Yacc script is given below; files are divided into three sections,
-separated by lines that contain only two percent signs, as follows    
+The structure of our Yacc script is given below; Our file is divided into three sections which are as follows:    
 
-Definition section      
+-Definition section      
+      
+-Rules section    
 
-%%      
-
-Rules section    
-
-%%       
-
-C code section     
+-C code section     
 
 The definition section is used to define any parameters for the C program, any
 header files to be included and global variable declarations. We also define all
