@@ -159,3 +159,4 @@ Don't just blindly copy paste this report. This is a sample template file.
 
 - Mini C Introduction: https://en.wikipedia.org/wiki/Small-C
 - Sample Constructs Of The Language: https://homepage.cs.uiowa.edu/~tinelli/classes/3820/Fall16/notes/chap7-micro-C.pdf
+- Lexical Analyzer Introduction: https://github.com/gauribaraskar/Mini-C-compiler/blob/master/Report/Report%20-%20Lexical%20Analysis.pdf
