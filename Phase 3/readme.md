@@ -26,15 +26,20 @@ separated by lines that contain only two percent signs, as follows
 
 Definition section      
 
-%%   
-Rules section     
-%%   
-C code section    
+%%      
+
+Rules section    
+
+%%       
+
+C code section     
+
 The definition section is used to define any parameters for the C program, any
 header files to be included and global variable declarations. We also define all
 parameters related to the parser here, specifications like using Leftmost derivationsor Rightmost derivations, precedence and left right associativity are declared here,
 data types and tokens which will be used by the lexical analyser are also declared in
-this stage.   
+this stage.    
+
 The Rules section contains the entire grammar which is used for deciding if the input
 text is legally correct according to the specifications of the language. Yacc uses this
 rules for reducing the token stream received from the scanner, all rules are linked to
