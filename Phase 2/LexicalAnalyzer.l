@@ -100,7 +100,6 @@ hex [0-9a-f]
 
 int main()
 {
-  yyin=fopen("testcases/test-case-5.c","r");
   symbol_table=create_table();
   constant_table=create_table();
   yylex();
